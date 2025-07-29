@@ -1,0 +1,21 @@
+# Ignore Python cache and virtualenvs
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+
+# Ignore OS files and editor settings
+.DS_Store
+*.swp
+
+# Ignore version control
+.git/
+.gitignore
+
+# Ignore local config and data
+*.log
+.env
+*.ipynb
+data/
+output/

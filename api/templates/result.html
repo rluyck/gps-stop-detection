@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-button {
+            margin-top: 20px;
+        }
+
+        .back-button button {
+            padding: 10px 16px;
+            font-size: 16px;
+            background-color: #005f87;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .back-button button:hover {
+            background-color: #005f87;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stats</h1>
+    <ul>
+        {% for key, value in stats.items() %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+    <p style="color: red; font-weight: bold;">Stop locations in red</p>
+    <iframe src="{{ map_url }}" width="50%" height="600px" style="border: none;"></iframe>
+
+    <div class="back-button">
+        <a href="/selector">
+            <button>← Back to Trace Selector</button>
+        </a>
+    </div>
+</body>
+</html>

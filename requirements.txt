@@ -1,0 +1,53 @@
+# ===============================
+# Web Framework & API Server
+# ===============================
+fastapi==0.116.1           # Web framework
+starlette==0.47.2          # ASGI toolkit used by FastAPI
+uvicorn==0.29.0            # ASGI server to run FastAPI apps
+python-multipart==0.0.9    # Required for handling form/file uploads
+Jinja2==3.1.6              # Templating engine for rendering HTML
+requests==2.32.4           # HTTP client for external requests
+
+# ===============================
+# Data Analysis & Machine Learning
+# ===============================
+pandas==2.3.1
+numpy==2.2.0
+scipy==1.13.0
+scikit-learn==1.7.1
+xgboost==3.0.2
+shap==0.48.0
+joblib==1.5.1
+
+# ===============================
+# Geospatial Analysis
+# ===============================
+geopandas==1.1.1
+shapely==2.1.1
+pyproj==3.7.1
+geopy==2.4.1
+folium==0.20.0
+branca==0.8.1
+mapclassify==2.10.0
+xyzservices==2025.4.0
+
+# ===============================
+# Visualization
+# ===============================
+matplotlib==3.10.3
+seaborn==0.13.2
+
+# ===============================
+# Development Tools
+# ===============================
+ruff==0.12.5               # Linter
+ipython==9.4.0             # Interactive shell
+ipdb==0.13.13              # Debugger
+jupyter_client==8.6.3      # Jupyter backend
+jupyter_core==5.8.1        # Jupyter infrastructure
+
+# ===============================
+# Utility Libraries
+# ===============================
+tqdm==4.67.1               # Progress bars
+typing_extensions==4.14.1  # Typing support for older Python versions

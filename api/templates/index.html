@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GPS Stop Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .banner {
+      width: 100%;
+      max-width: 800px;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .banner h1 {
+      font-size: 42px;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 90%;
+      margin-top: 30px;
+      margin-bottom: 40px;
+      text-align: left;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    form {
+      margin-top: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: normal;
+    }
+
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 8px 20px;
+      border: none;
+      background-color: #546e7a;
+      color: white;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #455a64;
+    }
+
+    .caption {
+      font-size: 13px;
+      color: #555;
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    .preview {
+      max-width: 1200px;
+      width: 90%;
+      margin-top: 20px;
+      margin-bottom: 60px;
+      text-align: center;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <h1>DETECT STOP LOCATIONS</h1>    
+  </div>
+
+  <div class="container">
+    <h2>Upload your trace(s) here!</h2>
+    <form action="/analyze/html" method="post" enctype="multipart/form-data">
+      <input type="file" name="files" id="files" multiple required>
+      <p class="caption">Only .CSV format is supported.</p>
+      <button type="submit">RUN</button>
+    </form>
+  </div>
+
+  <div class="preview">
+    <img class="preview-image" src="/static/stops_example.png" alt="Voorbeeldafbeelding van GPS-stops">
+    <p class="caption">Example, stops shown in red.</p>
+  </div>
+</body>
+</html>

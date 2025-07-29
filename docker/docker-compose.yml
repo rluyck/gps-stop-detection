@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  gps-api:
+    build: .
+    container_name: gps-stop-detection
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add Redis for caching (uncomment if needed)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: gps-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   restart: unless-stopped
+
+  # Optional: Add PostgreSQL for data storage (uncomment if needed)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: gps-postgres
+  #   environment:
+  #     - POSTGRES_DB=gps_analysis
+  #     - POSTGRES_USER=gps_user
+  #     - POSTGRES_PASSWORD=secure_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+
+# volumes:
+#   redis_data:
+#   postgres_data:

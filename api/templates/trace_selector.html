@@ -1,0 +1,168 @@
+<!-- templates/trace_selector.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GPS Trace Selector</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f4; }
+        h2 { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        form { margin: 0; }
+        button {
+            padding: 6px 12px;
+            background-color: #546e7a;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #455a64;
+            cursor: pointer;
+        }
+        .action-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        .plot-all-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #546e7a;
+            margin-right: 10px;
+        }
+        .plot-all-btn:hover { background-color: #455a64; }
+
+        .back-btn {
+            padding: 10px 16px;
+            font-size: 16px;
+            background-color: #546e7a;
+        }
+        .back-btn:hover { background-color: #455a64; }
+
+        /* SHAP plot styling */
+        .shap-section {
+            background: #fff;
+            padding: 20px;
+            margin: 40px 0 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .shap-section h3 {
+            color: #546e7a;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .shap-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .shap-description {
+            text-align: left;
+            color: #666;
+            font-size: 14px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        table {
+            table-layout: fixed;
+            width: 50%;    
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+            max-width: 80px;
+            word-wrap: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <h1>Results</h1>
+    <p style="margin-top: 10px; color: #666; font-size: 14px;">
+        Use "Plot All Traces" to see all trajectories with the predicted <span style="color: red;">stops</span> on a single map,
+        or select individual traces below.
+    </p>
+
+    <!-- Plot All Button -->
+    <form method="post" action="/visualize/all" style="margin: 20px 0;">
+        <button type="submit" class="plot-all-btn">Plot All Traces</button>
+    </form>
+
+    <!-- Individual Traces Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Device ID</th>
+                <th>Trace Number</th>
+                <th>GPS Points</th>
+                <th>Stops Detected</th>
+                <th>Stop Ratio (%)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in trace_stats %}
+            <tr>
+                <td>{{ row.device_id }}</td>
+                <td>{{ row.trace_number }}</td>
+                <td>{{ row.total_points }}</td>
+                <td>{{ row.stopped_points }}</td>
+                <td>{{ row.stop_ratio }}</td>
+                <td>
+                    <form method="post" action="/visualize/trace">
+                        <input type="hidden" name="device_id" value="{{ row.device_id }}">
+                        <input type="hidden" name="trace_number" value="{{ row.trace_number }}">
+                        <button type="submit">Show Map</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Back to Upload Section -->
+    <div style="margin-top: 30px;">
+        <a href="/">
+            <button class="back-btn">← Back to Upload Page</button>
+        </a>
+    </div>
+
+    <!-- SHAP Explainability Section -->
+    {% if shap_plot %}
+    <div class="shap-section">
+        <h2>Model Explainability</h2>
+        <p><em>How to read this chart:</em></p>
+        <ul>
+            <li>Each dot represents a GPS point.</li>
+            <li>The position on the X-axis shows how much a feature pushes the prediction toward <strong>stop</strong> (right) or <strong>no stop</strong> (left).</li>
+            <li><span style="color: red;">Red</span> means a high feature value, <span style="color: blue;">blue</span> a low one.</li>
+            <li>Features are sorted by overall importance from top to bottom.</li>
+        </ul>
+        <p><em>Feature explanations:</em></p>    
+        <ul>
+            <li><strong>distance_m</strong>: The distance in meters between consecutive GPS points.</li>
+            <li><strong>lat</strong>: The latitude coordinate of the GPS point, representing the north-south position on the globe.</li>
+            <li><strong>lon</strong>: The longitude coordinate of the GPS point, representing the east-west position on the globe.</li>
+        </ul>
+
+        <img src="data:image/png;base64,{{ shap_plot }}" alt="SHAP Feature Importance">
+    </div>
+    {% endif %}
+</body>
+</html>

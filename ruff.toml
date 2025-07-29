@@ -1,0 +1,10 @@
+# ruff.toml
+
+# Folders to ignore
+exclude = ["venv", "build", "__pycache__"]
+
+# Max line length (optional)
+line-length = 100
+
+# Enable auto-fix by default (optional for CLI, not required)
+fix = true
