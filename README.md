@@ -4,15 +4,18 @@ This project provides a FastAPI web application for detecting stops in GPS traje
 
 <img src="api/static/stops_example.png" alt="Example of GPS stops detection" width="600" style="display: block; margin: 0 left;"/>
 
-## Requirements
+## Features
 
-- Docker installed on your system
-- GPS trace files in CSV format
-- Modern web browser for the interface
+- **File Upload**: Upload single or multiple GPS trajectory files (`.csv`) through a web interface
+   - If you want to test the app and you don't have any traces, use the file in data/raw/gps_traces.csv.
+- **Stop Detection**: Detect stops using a trained machine learning model (RandomForestClassifier)
+- **Interactive Maps**: Visualize detected stops and paths on interactive Folium maps
+- **Model Explainability**: Understand model predictions with SHAP feature importance plots
+- **Batch Processing**: Process multiple traces simultaneously
 
 ## Data Format
 
-The uploaded `.csv` files must contain the following columns:
+The uploaded `.csv` traces must contain the following columns:
 
 | Column         | Type              | Description                                                                 |
 |----------------|-------------------|-----------------------------------------------------------------------------|
@@ -28,74 +31,26 @@ device_001,1,2024-05-17T14:35:10,POINT(4.395 51.209)
 device_001,1,2024-05-17T14:35:15,POINT(4.396 51.210)
 device_001,1,2024-05-17T14:35:20,POINT(4.395 51.209)
 ```
+## Approach
 
----
-
-## Features
-
-- **File Upload**: Upload single or multiple GPS trajectory files (`.csv`) through a web interface
-   - If you want to test the app and you don't have any traces, use the file in data/raw/gps_traces.csv.
-- **Stop Detection**: Detect stops using a trained machine learning model (RandomForestClassifier)
-- **Interactive Maps**: Visualize detected stops and paths on interactive Folium maps
-- **Model Explainability**: Understand model predictions with SHAP feature importance plots
-- **Batch Processing**: Process multiple traces simultaneously
-
----
-
-## How the Model Works
-
-This project uses a supervised learning approach for stop detection. The training process was as follows:
-
-### Training Data Preparation
 1. A dataset of GPS traces was provided by the client, TravelTrack Inc.
-2. Stops in this dataset were labeled using a **rule-based approach**:
-   - A point is considered "stopped" if `speed_kmh < 1`
-   - Only stop segments with a total duration of **at least 5 seconds** are retained
-   - Unrealistic outliers were removed
-
-### Feature Engineering
-
-- **Distance metrics**: Distance between consecutive GPS points.
-- **Spatial coordinates**: Latitude and longitude values.
-- To prevent data leakage, we exclude time (distance/time = one-to-one relationship with stop labels).
-
-
-### Model Training
-3. The labeled GPS points were split into **training** (60%), **validation** (20%), and **test** (20%) sets
-4. A **Random Forest Classifier** was trained with hyperparameter optimization
-5. Model performance was validated using cross-validation
-
-### Model Performance
-
-**Test Set Results** (Final model evaluation):
-```
-              precision    recall  f1-score   support
-
-       False       1.00      0.99      1.00      1762
-        True       0.72      1.00      0.84        23
-
-    accuracy                           0.99      1785
-   macro avg       0.86      1.00      0.92      1785
-weighted avg       1.00      0.99      1.00      1785
-```
-
-**Validation Set Results** (Model tuning):
-```
-              precision    recall  f1-score   support
-
-       False       1.00      0.99      1.00      1804
-        True       0.52      1.00      0.68        17
-
-    accuracy                           0.99      1821
-   macro avg       0.76      1.00      0.84      1821
-weighted avg       1.00      0.99      0.99      1821
-```
-
-**Note**: The model is optimized for high recall in stop detection (True class), meaning it captures all actual stops but may include some false positives. The test set shows improved precision (72%) compared to validation (52%), indicating good generalization. This conservative approach ensures no genuine stops are missed.
-
-**Important Note**: The rule-based method is **only used during the training phase** to create labels. When you upload a GPS trace via the app, **only the trained ML model** is applied to predict stops.
-
----
+2. Data Exploration, see data_exploration.ipynb.
+3. Label (target = stopped) the provided dataset using a **rule-based approach**:
+   - A point is considered "stopped" if `speed_kmh < 1` and at least for 5 sec on the (exact) same location (GPS data might be jittery, so probably the exact same location might not be the best approach, but also keep points very close)
+4. Feature Engineering
+   - **Distance metrics**: Distance between consecutive GPS points.
+   - **Spatial coordinates**: Latitude and longitude values.
+   - To prevent data leakage, we exclude time (distance/time = one-to-one relationship with stop labels).
+5. Model development
+   - Removed unrealistic outliers.
+   - Used unique device-trace combinations for train/test/val split.
+      - We want to keep all GPS points from the same trace together (not part in train, part in test).
+      - This avoids "cheating" by seeing parts of the same trace in both training and evaluation.
+   - Split dataset in train 60% / validation 20% / test 20%
+   - Train model on training set
+      - Baseline - logistic regression
+      - RandomForestClassifier and XGBOOST
+         - Hyperparameter Search: Manual randomized search using validation set for evaluation
 
 ## Installation & Setup
 
