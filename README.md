@@ -34,6 +34,7 @@ device_001,1,2024-05-17T14:35:20,POINT(4.395 51.209)
 ## Features
 
 - **File Upload**: Upload single or multiple GPS trajectory files (`.csv`) through a web interface
+   - If you want to test the app and you don't have any traces, use the file in data/raw/gps_traces.csv.
 - **Stop Detection**: Detect stops using a trained machine learning model (RandomForestClassifier)
 - **Interactive Maps**: Visualize detected stops and paths on interactive Folium maps
 - **Model Explainability**: Understand model predictions with SHAP feature importance plots
@@ -159,5 +160,9 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 - unit tests
 - clean api script
+- remove unused files from repo
+- look for more data (open-source gps traces) to train on
+- do testing on more data (open-source gps traces)
+- ...
 
 ---

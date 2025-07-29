@@ -40,3 +40,6 @@ build/
 
 # dotenv files (secrets)
 .env
+
+# Docker
+.dockerignore
