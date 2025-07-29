@@ -18,12 +18,12 @@ The uploaded `.csv` files must contain the following columns:
 |----------------|-------------------|-----------------------------------------------------------------------------|
 | `device_id`    | string            | Identifier for the GPS device (e.g., vehicle or user ID).                  |
 | `trace_number` | integer           | Trace sequence number (e.g., session or trip ID).                          |
-| `timestamp`    | string (datetime) | Timestamp in ISO 8601 format, e.g., `2024-05-17T14:35:10`.                 |
+| `ts       `    | string (datetime) | Timestamp in ISO 8601 format, e.g., `2024-05-17T14:35:10`.                 |
 | `geometry`     | string (WKT)      | GPS coordinates in Well-Known Text (WKT), e.g., `POINT(4.395 51.209)`.     |
 
 ### Example Data Format
 ```csv
-device_id,trace_number,timestamp,geometry
+device_id,trace_number,ts,geometry
 device_001,1,2024-05-17T14:35:10,POINT(4.395 51.209)
 device_001,1,2024-05-17T14:35:15,POINT(4.396 51.210)
 device_001,1,2024-05-17T14:35:20,POINT(4.395 51.209)
