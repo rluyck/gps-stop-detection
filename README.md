@@ -118,6 +118,9 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 - remove unused files from repo
 - look for more data (open-source gps traces) to train on
 - do testing on more data (open-source gps traces)
+- add features: 
+   - Heading/direction changes
+   - Acceleration/deceleration
 - ...
 
 ---
